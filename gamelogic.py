@@ -29,16 +29,15 @@ class GameLogic:
         self.paddle_right.reset()
 
     def ball_falls_left(self): # <-- TODO: complete this function. check if self.ball.position[0] goes below 0
-        return False
+        # 공의 x-좌표가 0보다 작은지 확인하여 왼쪽으로 벗어났는지 판단
+        return self.ball.position[0] < 0
 
     def ball_falls_right(self): # <-- TODO: complete this function. check if self.ball.position[0] exceeds WIDTH
-        return False
+        # 공의 x-좌표가 화면 너비(WIDTH)를 초과했는지 확인하여 오른쪽으로 벗어났는지 판단
+        return self.ball.position[0] > WIDTH-1
 
     def ball_hits_wall(self):
-            if self.ball.y <= 0 or self.ball.y + self.ball.height >= self.screen_height:
-                self.ball.vy = -self.ball.vy  # 공의 y 방향 반전
-            return True
-        return False
+        return self.ball.position[1] <= 0 or self.ball.position[1] >= HEIGHT-1
 
     def ball_hits_paddle(self):
         return self.ball.is_collision(self.paddle_left) or self.ball.is_collision(self.paddle_right)
@@ -50,22 +49,21 @@ class GameLogic:
         
         # 공이 벽에 부딪히는지 확인
         if self.ball_hits_wall():
-            self.ball.vy = -self.ball.vy  # 공의 y 방향 반전
+            self.ball.velocity[1] *= -1
     
         # 공이 패들에 부딪히는지 확인
         if self.ball_hits_paddle():
-            self.ball.vx = -self.ball.vx  # 공의 x 방향 반전
-        """
-        check the conditions for the following and apply appropriate actions:
-        IF ball falls left
-            - score of the right paddle goes up
-            - resets game
-        IF ball falls right
-            - score of the left paddle goes up
-            - resets game
-        IF ball hits wall
-            - Y-axis velocity (i.e., self.ball.velocity[1]) reverses
-        IF ball hits paddle
-            - X-axis velocity reverses
-        """
+            self.ball.velocity[0] *= -1
+
+        # <-- TODO: Complete the following
+        
+        if self.ball_falls_left():
+            # 공이 왼쪽으로 벗어났다면 오른쪽 패들의 점수를 올리고 게임을 리셋
+            self.paddle_right.score += 1
+            self.reset()
+
+        if self.ball_falls_right():
+            # 공이 오른쪽으로 벗어났다면 왼쪽 패들의 점수를 올리고 게임을 리셋
+            self.paddle_left.score += 1
+            self.reset()
 
