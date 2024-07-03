@@ -34,7 +34,10 @@ class GameLogic:
     def ball_falls_right(self): # <-- TODO: complete this function. check if self.ball.position[0] exceeds WIDTH
         return False
 
-    def ball_hits_wall(self): # <-- TODO: complete this function. check if self.ball.position[1] goes beyond 0 or HEIGHT
+    def ball_hits_wall(self):
+            if self.ball.y <= 0 or self.ball.y + self.ball.height >= self.screen_height:
+                self.ball.vy = -self.ball.vy  # 공의 y 방향 반전
+            return True
         return False
 
     def ball_hits_paddle(self):
@@ -44,8 +47,15 @@ class GameLogic:
         self.ball.update()
         self.paddle_left.update()
         self.paddle_right.update()
-        # <-- TODO: Complete the following
-        """ 
+        
+        # 공이 벽에 부딪히는지 확인
+        if self.ball_hits_wall():
+            self.ball.vy = -self.ball.vy  # 공의 y 방향 반전
+    
+        # 공이 패들에 부딪히는지 확인
+        if self.ball_hits_paddle():
+            self.ball.vx = -self.ball.vx  # 공의 x 방향 반전
+        """
         check the conditions for the following and apply appropriate actions:
         IF ball falls left
             - score of the right paddle goes up
